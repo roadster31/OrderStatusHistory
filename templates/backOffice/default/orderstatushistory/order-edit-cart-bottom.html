@@ -1,0 +1,22 @@
+<div class="table-responsive">
+    <table class="table table-striped table-condensed table-left-aligned">
+        <caption class="clearfix">
+            {intl l='Order status history' d='orderstatushistory.bo.default'}
+        </caption>
+        <tbody>
+        <tr>
+            <th>{intl l="Order status" d='orderstatushistory.bo.default'}</th>
+            <th>{intl l="Date of change" d='orderstatushistory.bo.default'}</th>
+        </tr>
+        {loop type="order-status-history" name="order-account-order" order_id=$order_id}
+            <tr>
+                <td>{loop type="order-status" name="status" id=$ORDER_STATUS_ID}
+                        <span class='label' style='background-color: {$COLOR};'>{$TITLE}</span>
+                    {/loop}
+                </td>
+                <td>{format_date date=$CHANGE_DATE}</td>
+            </tr>
+        {/loop}
+        </tbody>
+    </table>
+</div>
