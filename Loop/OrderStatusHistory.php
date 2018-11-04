@@ -13,6 +13,7 @@
  */
 namespace OrderStatusHistory\Loop;
 
+use Doctrine\Common\Collections\Criteria;
 use OrderStatusHistory\Model\OrderStatusChange;
 use OrderStatusHistory\Model\OrderStatusChangeQuery;
 use Thelia\Core\Template\Element\BaseLoop;
@@ -21,6 +22,8 @@ use Thelia\Core\Template\Element\LoopResultRow;
 use Thelia\Core\Template\Element\PropelSearchLoopInterface;
 use Thelia\Core\Template\Loop\Argument\Argument;
 use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
+use Thelia\Model\OrderVersion;
+use Thelia\Model\OrderVersionQuery;
 
 /**
  * Class OrderStatusHistory
@@ -31,9 +34,10 @@ class OrderStatusHistory extends BaseLoop implements PropelSearchLoopInterface
 {
     public function buildModelCriteria()
     {
-        $search = OrderStatusChangeQuery::create()
-            ->filterByOrderId($this->getOrderId())
-            ->orderByChangeDate()
+        $search = OrderVersionQuery::create()
+            ->filterById($this->getOrderId())
+            ->groupByStatusId()
+            ->orderByVersionCreatedAt(Criteria::ASC)
         ;
 
         return $search;
@@ -46,15 +50,15 @@ class OrderStatusHistory extends BaseLoop implements PropelSearchLoopInterface
      */
     public function parseResults(LoopResult $loopResult)
     {
-        /** @var OrderStatusChange $item */
+        /** @var orderversion $item */
         foreach ($loopResult->getResultDataCollection() as $item) {
             $loopResultRow = new LoopResultRow($item);
 
             $loopResultRow
                 ->set('ID', $item->getId())
-                ->set('ORDER_ID', $item->getOrderId())
-                ->set('ORDER_STATUS_ID', $item->getOrderStatusId())
-                ->set('CHANGE_DATE', $item->getChangeDate())
+                ->set('ORDER_ID', $item->getId())
+                ->set('STATUS_ID', $item->getStatusId())
+                ->set('CHANGE_DATE', $item->getVersionCreatedAt())
             ;
 
             $loopResult->addRow($loopResultRow);

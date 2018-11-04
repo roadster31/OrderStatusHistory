@@ -20,12 +20,4 @@ class OrderStatusHistory extends BaseModule
 {
     /** @var string */
     const DOMAIN_NAME = 'orderstatushistory';
-
-
-    public function postActivation(ConnectionInterface $con = null)
-    {
-        $database = new Database($con);
-
-        $database->insertSql(null, [ __DIR__ . '/Config/thelia.sql' ]);
-    }
 }

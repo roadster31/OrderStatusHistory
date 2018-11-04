@@ -10,7 +10,7 @@
         </tr>
         {loop type="order-status-history" name="order-account-order" order_id=$order_id}
             <tr>
-                <td>{loop type="order-status" name="status" id=$ORDER_STATUS_ID}
+                <td>{loop type="order-status" name="status" id=$STATUS_ID}
                         <span class='label' style='background-color: {$COLOR};'>{$TITLE}</span>
                     {/loop}
                 </td>

@@ -8,12 +8,6 @@
         <loop name="order-status-history" class="OrderStatusHistory\Loop\OrderStatusHistory" />
     </loops>
 
-    <services>
-        <service id="orderstatushistory.event_manager" class="OrderStatusHistory\EventListeners\EventManager">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-    </services>
-
     <hooks>
         <hook id="orderstatushistory.hook" class="OrderStatusHistory\Hook\HookManager">
             <tag name="hook.event_listener" event="order-edit.cart-bottom" type="back" />
