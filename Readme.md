@@ -47,9 +47,19 @@ et la date à laquelle les status ont été modifiés.
 
 ## Installation
 
+### Manuellement
+
 * L'installation est classique, soit en copiant les module dans le dossier ```<thelia_root>/local/modules/``` de votre Thelia, soit en envoyant le fichier Zip depuis la page "Modules" de vitre back-office.
 
 * Activez ensuite le module.
+
+### Composer
+
+Ajouter dans le fichier composer.json de thelia
+
+```
+composer require cqfdev/order-status-history-module ~1.0.0
+```
 
 ## Usage
 
