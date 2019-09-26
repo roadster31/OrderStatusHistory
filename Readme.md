@@ -5,8 +5,18 @@ and the date the statuses were changed.
 
 ## Installation
 
+### Manually
+
 * Copy the module into ```<thelia_root>/local/modules/``` directory and be sure that the name of the module is OrderStatusHistory, or upload the Zip file from the "Modules" page of your back-office.
 * Activate the module the "Modules" pages of your back-office.
+
+### Composer
+
+Add it in your main thelia composer.json file
+
+```
+composer require cqfdev/order-status-history-module ~1.0.0
+```
 
 ## Usage
 
