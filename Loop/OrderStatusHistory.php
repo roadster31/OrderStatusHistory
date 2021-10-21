@@ -36,7 +36,6 @@ class OrderStatusHistory extends BaseLoop implements PropelSearchLoopInterface
     {
         $search = OrderVersionQuery::create()
             ->filterById($this->getOrderId())
-            ->groupByStatusId()
             ->orderByVersionCreatedAt(Criteria::ASC)
         ;
 
