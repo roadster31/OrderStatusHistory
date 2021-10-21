@@ -14,12 +14,10 @@
 namespace OrderStatusHistory\Loop;
 
 use Doctrine\Common\Collections\Criteria;
-use OrderStatusHistory\Model\OrderStatusChange;
-use OrderStatusHistory\Model\OrderStatusChangeQuery;
+use Thelia\Core\Template\Element\ArraySearchLoopInterface;
 use Thelia\Core\Template\Element\BaseLoop;
 use Thelia\Core\Template\Element\LoopResult;
 use Thelia\Core\Template\Element\LoopResultRow;
-use Thelia\Core\Template\Element\PropelSearchLoopInterface;
 use Thelia\Core\Template\Loop\Argument\Argument;
 use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
 use Thelia\Model\OrderVersion;
@@ -30,16 +28,36 @@ use Thelia\Model\OrderVersionQuery;
  * @package OrderStatusHistory\Loop
  * @method int getOrderId()
  */
-class OrderStatusHistory extends BaseLoop implements PropelSearchLoopInterface
+class OrderStatusHistory extends BaseLoop implements ArraySearchLoopInterface
 {
-    public function buildModelCriteria()
+    public function buildArray()
     {
-        $search = OrderVersionQuery::create()
+        $changes = OrderVersionQuery::create()
             ->filterById($this->getOrderId())
             ->orderByVersionCreatedAt(Criteria::ASC)
-        ;
+            ->find();
 
-        return $search;
+        $current = null;
+
+        $result = [];
+
+        /** @var OrderVersion $change */
+        foreach ($changes as $change) {
+            if ($change->getStatusId() === $current) {
+                continue;
+            }
+
+            $current = $change->getStatusId();
+
+            $result[] = [
+                'ID' => $change->getId(),
+                'ORDER_ID' => $change->getId(),
+                'STATUS_ID' => $change->getStatusId(),
+                'CHANGE_DATE' => $change->getVersionCreatedAt()
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -53,12 +71,9 @@ class OrderStatusHistory extends BaseLoop implements PropelSearchLoopInterface
         foreach ($loopResult->getResultDataCollection() as $item) {
             $loopResultRow = new LoopResultRow($item);
 
-            $loopResultRow
-                ->set('ID', $item->getId())
-                ->set('ORDER_ID', $item->getId())
-                ->set('STATUS_ID', $item->getStatusId())
-                ->set('CHANGE_DATE', $item->getVersionCreatedAt())
-            ;
+            foreach ($item as $key => $value) {
+                $loopResultRow->set($key, $value);
+            }
 
             $loopResult->addRow($loopResultRow);
         }
